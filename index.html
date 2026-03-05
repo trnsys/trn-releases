@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Install trn, the TRNSYS v19 management tool">
+  <title>trn — The TRNSYS v19 management tool</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent:   #2563eb;
+      --accent-h: #1d4ed8;
+      --bg:       #f9fafb;
+      --surface:  #ffffff;
+      --border:   #e5e7eb;
+      --text:     #374151;
+      --muted:    #6b7280;
+      --code-bg:  #1e293b;
+      --code-fg:  #e2e8f0;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+              Helvetica, Arial, sans-serif;
+      --mono: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono",
+              Menlo, monospace;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      padding: 1.5rem 1rem;
+    }
+
+    .wrap {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    /* ── Header ── */
+    header {
+      text-align: center;
+      padding: 1.5rem 0 1.75rem;
+    }
+
+    header h1 {
+      font-family: var(--mono);
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+
+    header p {
+      margin-top: 0.35rem;
+      font-size: 1.125rem;
+      color: var(--muted);
+    }
+
+    /* ── Section cards ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .card h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    /* ── Download button ── */
+    .btn {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.875rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 7px;
+      transition: background 0.15s;
+    }
+
+    .btn:hover { background: var(--accent-h); }
+
+    /* ── Code block ── */
+    .codeblock-wrap {
+      display: flex;
+      align-items: stretch;
+      margin-bottom: 1rem;
+      background: var(--code-bg);
+      border-radius: 7px;
+    }
+
+    .codeblock-wrap pre {
+      flex: 1;
+      min-width: 0;
+      margin: 0;
+    }
+
+    .codeblock-wrap pre code {
+      display: block;
+      background: none;
+      color: var(--code-fg);
+      font-family: var(--mono);
+      font-size: 0.8125rem;
+      padding: 1rem 0.75rem 1rem 1.25rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border-radius: 0;
+    }
+
+    .copy-btn {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0 1rem 0 0.5rem;
+      color: #64748b;
+      line-height: 0;
+      transition: color 0.15s;
+    }
+
+    .copy-btn:hover { color: #94a3b8; }
+    .copy-btn.copied { color: #4ade80; }
+
+    ul.what {
+      padding-left: 1.25rem;
+    }
+
+    ul.what li { margin-bottom: 0.2rem; }
+
+    ul.what a, ol.what a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    ul.what a:hover, ol.what a:hover { text-decoration: underline; }
+
+    code {
+      font-family: var(--mono);
+      font-size: 0.875em;
+      background: #f1f5f9;
+      padding: 0.1em 0.35em;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.4rem;
+    }
+
+    .links a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .links a:hover { text-decoration: underline; }
+
+
+  </style>
+</head>
+<body>
+  <main class="wrap">
+
+    <header>
+      <h1>trn</h1>
+      <p>The TRNSYS v19 management tool</p>
+    </header>
+
+    <!-- Windows -->
+    <div class="card">
+      <h2>Windows</h2>
+      <a class="btn"
+         href="https://github.com/trnsys/trn-releases/releases/latest">
+        Download for Windows
+      </a>
+      <p style="margin-top: 0.5rem;">Downloads the latest installer from GitHub</p>
+    </div>
+
+    <!-- macOS / Linux -->
+    <div class="card">
+      <h2>Mac &amp; Linux</h2>
+
+      <div class="codeblock-wrap">
+        <pre><code id="curl-cmd">curl -fsSL https://trnsys.github.io/trn-releases/install.sh | sh</code></pre>
+        <button class="copy-btn" id="copy-btn" title="Copy" aria-label="Copy command">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="1" width="9" height="11" rx="1.5"/>
+            <path d="M3 4H2a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-1"/>
+          </svg>
+        </button>
+      </div>
+
+      <p>Detects your platform, downloads the latest release, and installs to <code>~/.local/bin</code></p>
+
+      <p style="margin-top: 0.75rem;">To install elsewhere: <code>curl -fsSL ... | TRN_INSTALL_DIR=~/bin sh</code></p>
+
+      <div class="links" style="margin-top: 0.75rem;">
+        <a href="https://trnsys.github.io/trn-releases/install.sh">View install.sh</a>
+      </div>
+    </div>
+
+    <!-- Manual installation -->
+    <div class="card">
+      <h2>Manual installation</h2>
+
+      <ol class="what" style="padding-left: 1.25rem;">
+        <li>Download the archive for your platform from the <a href="https://github.com/trnsys/trn-releases/releases/latest">latest release</a></li>
+        <li>Extract the binary (<code>trn</code> or <code>trn.exe</code>)</li>
+        <li>Optionally add the install location to your PATH</li>
+      </ol>
+    </div>
+
+
+  </main>
+<script>
+  (function () {
+    var btn = document.getElementById('copy-btn');
+    var copyIcon = btn.innerHTML;
+    var checkIcon = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,8 6,12 14,4"/></svg>';
+    btn.addEventListener('click', function () {
+      navigator.clipboard.writeText(document.getElementById('curl-cmd').textContent).then(function () {
+        btn.classList.add('copied');
+        btn.innerHTML = checkIcon;
+        setTimeout(function () {
+          btn.classList.remove('copied');
+          btn.innerHTML = copyIcon;
+        }, 2000);
+      }).catch(function () {});
+    });
+  })();
+</script>
+</body>
+</html>
