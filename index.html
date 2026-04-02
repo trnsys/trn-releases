@@ -18,11 +18,26 @@
       --muted:    #6b7280;
       --code-bg:  #1e293b;
       --code-fg:  #e2e8f0;
+      --code-inline-bg: #f1f5f9;
       --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
               Helvetica, Arial, sans-serif;
       --mono: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono",
               Menlo, monospace;
     }
+
+    /* ── Dark mode: forced ── */
+    html.dark {
+      --bg:       #111827;
+      --surface:  #1f2937;
+      --border:   #374151;
+      --text:     #e5e7eb;
+      --muted:    #9ca3af;
+      --accent:   #3b82f6;
+      --accent-h: #2563eb;
+      --code-bg:  #e2e8f0;
+      --code-fg:  #1e293b;
+    }
+    html.dark { --code-inline-bg: #374151; }
 
     body {
       font-family: var(--font);
@@ -34,7 +49,7 @@
     }
 
     .wrap {
-      max-width: 580px;
+      max-width: 640px;
       margin: 0 auto;
     }
 
@@ -60,6 +75,9 @@
 
     /* ── Section cards ── */
     .card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 10px;
@@ -73,11 +91,11 @@
       text-transform: uppercase;
       letter-spacing: 0.07em;
       color: var(--muted);
-      margin-bottom: 1rem;
     }
 
     /* ── Download button ── */
     .btn {
+      align-self: start;
       display: inline-block;
       background: var(--accent);
       color: #fff;
@@ -93,12 +111,9 @@
 
     /* ── Code block ── */
     .codeblock-wrap {
-      display: grid;
-      grid-template-columns: minmax(0, auto) max-content;
+      display: flex;
       align-items: center;
-      width: fit-content;
       max-width: 100%;
-      margin-bottom: 1rem;
       background: var(--code-bg);
       border-radius: 7px;
     }
@@ -106,6 +121,7 @@
     .codeblock-wrap pre {
       margin: 0;
       min-width: 0;
+      overflow: hidden;
     }
 
     .codeblock-wrap pre code {
@@ -124,6 +140,7 @@
     .copy-btn {
       display: flex;
       align-items: center;
+      flex-shrink: 0;
       background: none;
       border: none;
       cursor: pointer;
@@ -134,49 +151,65 @@
     }
 
     .copy-btn:hover { color: #94a3b8; }
-    .copy-btn.copied { color: #4ade80; }
+    .copy-btn.copied { color: #22c55e; }
 
-    ul.what {
-      padding-left: 1.25rem;
-    }
-
-    ul.what li { margin-bottom: 0.2rem; }
-
-    ul.what a, ol.what a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    ul.what a:hover, ol.what a:hover { text-decoration: underline; }
+    .card a:not(.btn) { color: var(--accent); text-decoration: none; }
+    .card a:not(.btn):hover { text-decoration: underline; }
 
     code {
       font-family: var(--mono);
       font-size: 0.875em;
-      background: #f1f5f9;
+      background: var(--code-inline-bg);
       padding: 0.1em 0.35em;
       border-radius: 4px;
       white-space: nowrap;
     }
 
-    .links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-top: 0.4rem;
+    /* ── Focus indicators ── */
+    *:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
     }
 
-    .links a {
-      color: var(--accent);
+    /* ── Skip link ── */
+    .skip-link {
+      position: absolute;
+      top: -3rem;
+      left: 0;
+      background: var(--accent);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 0 0 6px 0;
+      font-weight: 600;
       text-decoration: none;
+      z-index: 200;
+      transition: top 0.2s;
     }
+    .skip-link:focus { top: 0; }
 
-    .links a:hover { text-decoration: underline; }
-
+    /* ── Theme toggle ── */
+    .theme-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      padding: 0.25rem;
+      border-radius: 4px;
+      line-height: 0;
+      transition: color 0.15s;
+      z-index: 100;
+    }
+    .theme-toggle:hover { color: var(--text); }
 
   </style>
 </head>
 <body>
-  <main class="wrap">
+  <a href="#main" class="skip-link">Skip to content</a>
+  <button id="theme-toggle" class="theme-toggle" aria-label="Color scheme: system"></button>
+  <main id="main" class="wrap">
 
     <header>
       <h1>trn</h1>
@@ -188,9 +221,8 @@
       <h2>Windows</h2>
       <a class="btn"
          href="https://github.com/trnsys/trn-releases/releases/latest/download/trn-windows-x64-installer.msi">
-        Download for Windows
+        Download Installer
       </a>
-      <p style="margin-top: 0.5rem;">Downloads the latest installer from GitHub</p>
     </div>
 
     <!-- macOS / Linux -->
@@ -198,8 +230,7 @@
       <h2>Mac &amp; Linux</h2>
 
       <div class="codeblock-wrap">
-        <pre><code id="curl-cmd">curl -fsSL https://trnsys.github.io/trn-releases/install.sh | sh</code></pre>
-        <button class="copy-btn" id="copy-btn" title="Copy" aria-label="Copy command">
+        <pre><code id="curl-cmd">curl -fsSL https://trnsys.github.io/trn-releases/install.sh | sh</code></pre><button class="copy-btn" id="copy-btn" title="Copy command to the clipboard" aria-label="Copy command">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <rect x="5" y="1" width="9" height="11" rx="1.5"/>
             <path d="M3 4H2a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-1"/>
@@ -207,20 +238,16 @@
         </button>
       </div>
 
-      <p>Installs the latest release to <code>~/.local/bin</code></p>
+      <p>Runs the <a href="https://github.com/trnsys/trn-releases/blob/main/install.sh">install script</a> to download the latest version to <code>~/.local/bin</code></p>
 
-      <p style="margin-top: 0.75rem;">To install elsewhere: <code>curl -fsSL ... | TRN_INSTALL_DIR=~/bin sh</code></p>
-
-      <div class="links" style="margin-top: 0.75rem;">
-        <a href="https://github.com/trnsys/trn-releases/blob/main/install.sh">View install.sh</a>
-      </div>
+      <p>To install elsewhere: <code>curl -fsSL ... | TRN_INSTALL_DIR=~/bin sh</code></p>
     </div>
 
     <!-- Manual installation -->
     <div class="card">
       <h2>Manual installation</h2>
 
-      <ol class="what" style="padding-left: 1.25rem;">
+      <ol style="padding-left: 1.25rem;">
         <li>Download the archive for your platform from the <a href="https://github.com/trnsys/trn-releases/releases/latest">latest release</a></li>
         <li>Extract the binary (<code>trn</code> or <code>trn.exe</code>)</li>
         <li>Optionally add the install location to your PATH</li>
@@ -230,6 +257,7 @@
 
   </main>
 <script>
+  /* ── Copy button ── */
   (function () {
     var btn = document.getElementById('copy-btn');
     var copyIcon = btn.innerHTML;
@@ -238,12 +266,53 @@
       navigator.clipboard.writeText(document.getElementById('curl-cmd').textContent).then(function () {
         btn.classList.add('copied');
         btn.innerHTML = checkIcon;
+        btn.setAttribute('aria-label', 'Copied!');
         setTimeout(function () {
           btn.classList.remove('copied');
           btn.innerHTML = copyIcon;
+          btn.setAttribute('aria-label', 'Copy command');
         }, 2000);
       }).catch(function () {});
     });
+  })();
+
+  /* ── Theme toggle ── */
+  (function () {
+    var LABELS = {
+      system: 'Color scheme: system',
+      dark:   'Color scheme: dark',
+      light:  'Color scheme: light'
+    };
+    var ICONS = {
+      system: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="2" width="16" height="11" rx="2"/><path d="M6 17h6M9 13v4"/></svg>',
+      dark:   '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.5 11.5A7 7 0 1 1 6.5 2.5a5.5 5.5 0 0 0 9 9z"/></svg>',
+      light:  '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="9" r="3"/><path d="M9 1v2M9 15v2M1 9h2M15 9h2M3.22 3.22l1.42 1.42M13.36 13.36l1.42 1.42M3.22 14.78l1.42-1.42M13.36 4.64l1.42-1.42"/></svg>'
+    };
+    var current = 'system';
+    var toggle = document.getElementById('theme-toggle');
+
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+
+    function apply(state) {
+      current = state;
+      var html = document.documentElement;
+      var shouldBeDark = state === 'dark' || (state === 'system' && mq.matches);
+      html.classList.toggle('dark', shouldBeDark);
+      toggle.innerHTML = ICONS[state];
+      toggle.setAttribute('aria-label', LABELS[state]);
+    }
+
+    mq.addEventListener('change', function () {
+      if (current === 'system') apply('system');
+    });
+
+    toggle.addEventListener('click', function () {
+      var sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var states = sysDark ? ['system', 'light', 'dark'] : ['system', 'dark', 'light'];
+      apply(states[(states.indexOf(current) + 1) % states.length]);
+    });
+
+    apply('system');
   })();
 </script>
 </body>
