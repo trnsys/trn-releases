@@ -34,7 +34,7 @@
     }
 
     .wrap {
-      max-width: 640px;
+      max-width: 580px;
       margin: 0 auto;
     }
 
@@ -93,17 +93,19 @@
 
     /* ── Code block ── */
     .codeblock-wrap {
-      display: flex;
-      align-items: stretch;
+      display: grid;
+      grid-template-columns: minmax(0, auto) max-content;
+      align-items: center;
+      width: fit-content;
+      max-width: 100%;
       margin-bottom: 1rem;
       background: var(--code-bg);
       border-radius: 7px;
     }
 
     .codeblock-wrap pre {
-      flex: 1;
-      min-width: 0;
       margin: 0;
+      min-width: 0;
     }
 
     .codeblock-wrap pre code {
@@ -112,7 +114,7 @@
       color: var(--code-fg);
       font-family: var(--mono);
       font-size: 0.8125rem;
-      padding: 1rem 0.75rem 1rem 1.25rem;
+      padding: 1rem 0.5rem 1rem 1.25rem;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -120,7 +122,6 @@
     }
 
     .copy-btn {
-      flex-shrink: 0;
       display: flex;
       align-items: center;
       background: none;
@@ -206,7 +207,7 @@
         </button>
       </div>
 
-      <p>Detects your platform, downloads the latest release, and installs to <code>~/.local/bin</code></p>
+      <p>Installs the latest release to <code>~/.local/bin</code></p>
 
       <p style="margin-top: 0.75rem;">To install elsewhere: <code>curl -fsSL ... | TRN_INSTALL_DIR=~/bin sh</code></p>
 
